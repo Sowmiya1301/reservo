@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.10.0",
   "engineVersion": "0edf323efd1d98336f3f0a68684b56f689b900d3",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum ResourceType {\n  ROOM\n  EQUIPMENT\n  VEHICLE\n}\n\nenum ReservationStatus {\n  CONFIRMED\n  CANCELLED\n}\n\nmodel Resource {\n  id           String        @id @default(uuid()) @db.Uuid\n  name         String\n  type         ResourceType\n  capacity     Int?\n  location     String?\n  isActive     Boolean       @default(true) @map(\"is_active\")\n  createdAt    DateTime      @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n  reservations Reservation[]\n\n  @@map(\"resources\")\n}\n\nmodel Reservation {\n  id         String            @id @default(uuid()) @db.Uuid\n  resourceId String            @map(\"resource_id\") @db.Uuid\n  resource   Resource          @relation(fields: [resourceId], references: [id])\n  bookedBy   String            @map(\"booked_by\")\n  purpose    String?\n  startTime  DateTime          @map(\"start_time\") @db.Timestamptz(6)\n  endTime    DateTime          @map(\"end_time\") @db.Timestamptz(6)\n  status     ReservationStatus @default(CONFIRMED)\n  createdAt  DateTime          @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n\n  @@index([resourceId, startTime])\n  @@map(\"reservations\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -32,10 +32,10 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Resource\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"ResourceType\"},{\"name\":\"capacity\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\",\"dbName\":\"is_active\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"reservations\",\"kind\":\"object\",\"type\":\"Reservation\",\"relationName\":\"ReservationToResource\"}],\"dbName\":\"resources\",\"schema\":null},\"Reservation\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resourceId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"resource_id\"},{\"name\":\"resource\",\"kind\":\"object\",\"type\":\"Resource\",\"relationName\":\"ReservationToResource\"},{\"name\":\"bookedBy\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"booked_by\"},{\"name\":\"purpose\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startTime\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"start_time\"},{\"name\":\"endTime\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"end_time\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"ReservationStatus\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"}],\"dbName\":\"reservations\",\"schema\":null}},\"enums\":{},\"types\":{}}")
 config.parameterizationSchema = {
-  strings: JSON.parse("[]"),
-  graph: "AAAA"
+  strings: JSON.parse("[\"where\",\"orderBy\",\"cursor\",\"resource\",\"reservations\",\"_count\",\"Resource.findUnique\",\"Resource.findUniqueOrThrow\",\"Resource.findFirst\",\"Resource.findFirstOrThrow\",\"Resource.findMany\",\"data\",\"Resource.createOne\",\"Resource.createMany\",\"Resource.createManyAndReturn\",\"Resource.updateOne\",\"Resource.updateMany\",\"Resource.updateManyAndReturn\",\"create\",\"update\",\"Resource.upsertOne\",\"Resource.deleteOne\",\"Resource.deleteMany\",\"having\",\"_avg\",\"_sum\",\"_min\",\"_max\",\"Resource.groupBy\",\"Resource.aggregate\",\"Reservation.findUnique\",\"Reservation.findUniqueOrThrow\",\"Reservation.findFirst\",\"Reservation.findFirstOrThrow\",\"Reservation.findMany\",\"Reservation.createOne\",\"Reservation.createMany\",\"Reservation.createManyAndReturn\",\"Reservation.updateOne\",\"Reservation.updateMany\",\"Reservation.updateManyAndReturn\",\"Reservation.upsertOne\",\"Reservation.deleteOne\",\"Reservation.deleteMany\",\"Reservation.groupBy\",\"Reservation.aggregate\",\"AND\",\"OR\",\"NOT\",\"id\",\"resourceId\",\"bookedBy\",\"purpose\",\"startTime\",\"endTime\",\"ReservationStatus\",\"status\",\"createdAt\",\"equals\",\"in\",\"notIn\",\"not\",\"lt\",\"lte\",\"gt\",\"gte\",\"contains\",\"startsWith\",\"endsWith\",\"name\",\"ResourceType\",\"type\",\"capacity\",\"location\",\"isActive\",\"every\",\"some\",\"none\",\"is\",\"isNot\",\"connectOrCreate\",\"upsert\",\"createMany\",\"set\",\"disconnect\",\"delete\",\"connect\",\"updateMany\",\"deleteMany\",\"increment\",\"decrement\",\"multiply\",\"divide\"]"),
+  graph: "hAEUIAsEAABYACAuAABQADAvAAAJABAwAABQADAxAQAAAAE5QABXACFFAQBSACFHAABTRyJIAgBUACFJAQBVACFKIABWACEBAAAAAQAgDAMAAFwAIC4AAFoAMC8AAAMAEDAAAFoAMDEBAFEAITIBAFEAITMBAFIAITQBAFUAITVAAFcAITZAAFcAITgAAFs4IjlAAFcAIQIDAAB-ACA0AABdACAMAwAAXAAgLgAAWgAwLwAAAwAQMAAAWgAwMQEAAAABMgEAUQAhMwEAUgAhNAEAVQAhNUAAVwAhNkAAVwAhOAAAWzgiOUAAVwAhAwAAAAMAIAEAAAQAMAIAAAUAIAEAAAADACABAAAAAQAgCwQAAFgAIC4AAFAAMC8AAAkAEDAAAFAAMDEBAFEAITlAAFcAIUUBAFIAIUcAAFNHIkgCAFQAIUkBAFUAIUogAFYAIQMEAAB9ACBIAABdACBJAABdACADAAAACQAgAQAACgAwAgAAAQAgAwAAAAkAIAEAAAoAMAIAAAEAIAMAAAAJACABAAAKADACAAABACAIBAAAfAAgMQEAAAABOUAAAAABRQEAAAABRwAAAEcCSAIAAAABSQEAAAABSiAAAAABAQsAAA4AIAcxAQAAAAE5QAAAAAFFAQAAAAFHAAAARwJIAgAAAAFJAQAAAAFKIAAAAAEBCwAAEAAwAQsAABAAMAgEAABvACAxAQBhACE5QABjACFFAQBhACFHAABsRyJIAgBtACFJAQBiACFKIABuACECAAAAAQAgCwAAEwAgBzEBAGEAITlAAGMAIUUBAGEAIUcAAGxHIkgCAG0AIUkBAGIAIUogAG4AIQIAAAAJACALAAAVACACAAAACQAgCwAAFQAgAwAAAAEAIBIAAA4AIBMAABMAIAEAAAABACABAAAACQAgBwUAAGcAIBgAAGgAIBkAAGsAIBoAAGoAIBsAAGkAIEgAAF0AIEkAAF0AIAouAABGADAvAAAcABAwAABGADAxAQA2ACE5QAA5ACFFAQA3ACFHAABHRyJIAgBIACFJAQA4ACFKIABJACEDAAAACQAgAQAAGwAwFwAAHAAgAwAAAAkAIAEAAAoAMAIAAAEAIAEAAAAFACABAAAABQAgAwAAAAMAIAEAAAQAMAIAAAUAIAMAAAADACABAAAEADACAAAFACADAAAAAwAgAQAABAAwAgAABQAgCQMAAGYAIDEBAAAAATIBAAAAATMBAAAAATQBAAAAATVAAAAAATZAAAAAATgAAAA4AjlAAAAAAQELAAAkACAIMQEAAAABMgEAAAABMwEAAAABNAEAAAABNUAAAAABNkAAAAABOAAAADgCOUAAAAABAQsAACYAMAELAAAmADAJAwAAZQAgMQEAYQAhMgEAYQAhMwEAYQAhNAEAYgAhNUAAYwAhNkAAYwAhOAAAZDgiOUAAYwAhAgAAAAUAIAsAACkAIAgxAQBhACEyAQBhACEzAQBhACE0AQBiACE1QABjACE2QABjACE4AABkOCI5QABjACECAAAAAwAgCwAAKwAgAgAAAAMAIAsAACsAIAMAAAAFACASAAAkACATAAApACABAAAABQAgAQAAAAMAIAQFAABeACAaAABgACAbAABfACA0AABdACALLgAANQAwLwAAMgAQMAAANQAwMQEANgAhMgEANgAhMwEANwAhNAEAOAAhNUAAOQAhNkAAOQAhOAAAOjgiOUAAOQAhAwAAAAMAIAEAADEAMBcAADIAIAMAAAADACABAAAEADACAAAFACALLgAANQAwLwAAMgAQMAAANQAwMQEANgAhMgEANgAhMwEANwAhNAEAOAAhNUAAOQAhNkAAOQAhOAAAOjgiOUAAOQAhCwUAADwAIBoAAEQAIBsAAEQAIDoBAAAAATsBAAAABDwBAAAABD0BAEUAIT4BAAAAAT8BAAAAAUABAAAAAUEBAAAAAQ4FAAA8ACAaAABEACAbAABEACA6AQAAAAE7AQAAAAQ8AQAAAAQ9AQBDACE-AQAAAAE_AQAAAAFAAQAAAAFBAQAAAAFCAQAAAAFDAQAAAAFEAQAAAAEOBQAAQQAgGgAAQgAgGwAAQgAgOgEAAAABOwEAAAAFPAEAAAAFPQEAQAAhPgEAAAABPwEAAAABQAEAAAABQQEAAAABQgEAAAABQwEAAAABRAEAAAABCwUAADwAIBoAAD8AIBsAAD8AIDpAAAAAATtAAAAABDxAAAAABD1AAD4AIT5AAAAAAT9AAAAAAUBAAAAAAUFAAAAAAQcFAAA8ACAaAAA9ACAbAAA9ACA6AAAAOAI7AAAAOAg8AAAAOAg9AAA7OCIHBQAAPAAgGgAAPQAgGwAAPQAgOgAAADgCOwAAADgIPAAAADgIPQAAOzgiCDoCAAAAATsCAAAABDwCAAAABD0CADwAIT4CAAAAAT8CAAAAAUACAAAAAUECAAAAAQQ6AAAAOAI7AAAAOAg8AAAAOAg9AAA9OCILBQAAPAAgGgAAPwAgGwAAPwAgOkAAAAABO0AAAAAEPEAAAAAEPUAAPgAhPkAAAAABP0AAAAABQEAAAAABQUAAAAABCDpAAAAAATtAAAAABDxAAAAABD1AAD8AIT5AAAAAAT9AAAAAAUBAAAAAAUFAAAAAAQ4FAABBACAaAABCACAbAABCACA6AQAAAAE7AQAAAAU8AQAAAAU9AQBAACE-AQAAAAE_AQAAAAFAAQAAAAFBAQAAAAFCAQAAAAFDAQAAAAFEAQAAAAEIOgIAAAABOwIAAAAFPAIAAAAFPQIAQQAhPgIAAAABPwIAAAABQAIAAAABQQIAAAABCzoBAAAAATsBAAAABTwBAAAABT0BAEIAIT4BAAAAAT8BAAAAAUABAAAAAUEBAAAAAUIBAAAAAUMBAAAAAUQBAAAAAQ4FAAA8ACAaAABEACAbAABEACA6AQAAAAE7AQAAAAQ8AQAAAAQ9AQBDACE-AQAAAAE_AQAAAAFAAQAAAAFBAQAAAAFCAQAAAAFDAQAAAAFEAQAAAAELOgEAAAABOwEAAAAEPAEAAAAEPQEARAAhPgEAAAABPwEAAAABQAEAAAABQQEAAAABQgEAAAABQwEAAAABRAEAAAABCwUAADwAIBoAAEQAIBsAAEQAIDoBAAAAATsBAAAABDwBAAAABD0BAEUAIT4BAAAAAT8BAAAAAUABAAAAAUEBAAAAAQouAABGADAvAAAcABAwAABGADAxAQA2ACE5QAA5ACFFAQA3ACFHAABHRyJIAgBIACFJAQA4ACFKIABJACEHBQAAPAAgGgAATwAgGwAATwAgOgAAAEcCOwAAAEcIPAAAAEcIPQAATkciDQUAAEEAIBgAAE0AIBkAAEEAIBoAAEEAIBsAAEEAIDoCAAAAATsCAAAABTwCAAAABT0CAEwAIT4CAAAAAT8CAAAAAUACAAAAAUECAAAAAQUFAAA8ACAaAABLACAbAABLACA6IAAAAAE9IABKACEFBQAAPAAgGgAASwAgGwAASwAgOiAAAAABPSAASgAhAjogAAAAAT0gAEsAIQ0FAABBACAYAABNACAZAABBACAaAABBACAbAABBACA6AgAAAAE7AgAAAAU8AgAAAAU9AgBMACE-AgAAAAE_AgAAAAFAAgAAAAFBAgAAAAEIOggAAAABOwgAAAAFPAgAAAAFPQgATQAhPggAAAABPwgAAAABQAgAAAABQQgAAAABBwUAADwAIBoAAE8AIBsAAE8AIDoAAABHAjsAAABHCDwAAABHCD0AAE5HIgQ6AAAARwI7AAAARwg8AAAARwg9AABPRyILBAAAWAAgLgAAUAAwLwAACQAQMAAAUAAwMQEAUQAhOUAAVwAhRQEAUgAhRwAAU0ciSAIAVAAhSQEAVQAhSiAAVgAhCDoBAAAAATsBAAAABDwBAAAABD0BAFkAIT4BAAAAAT8BAAAAAUABAAAAAUEBAAAAAQs6AQAAAAE7AQAAAAQ8AQAAAAQ9AQBEACE-AQAAAAE_AQAAAAFAAQAAAAFBAQAAAAFCAQAAAAFDAQAAAAFEAQAAAAEEOgAAAEcCOwAAAEcIPAAAAEcIPQAAT0ciCDoCAAAAATsCAAAABTwCAAAABT0CAEEAIT4CAAAAAT8CAAAAAUACAAAAAUECAAAAAQs6AQAAAAE7AQAAAAU8AQAAAAU9AQBCACE-AQAAAAE_AQAAAAFAAQAAAAFBAQAAAAFCAQAAAAFDAQAAAAFEAQAAAAECOiAAAAABPSAASwAhCDpAAAAAATtAAAAABDxAAAAABD1AAD8AIT5AAAAAAT9AAAAAAUBAAAAAAUFAAAAAAQNLAAADACBMAAADACBNAAADACAIOgEAAAABOwEAAAAEPAEAAAAEPQEAWQAhPgEAAAABPwEAAAABQAEAAAABQQEAAAABDAMAAFwAIC4AAFoAMC8AAAMAEDAAAFoAMDEBAFEAITIBAFEAITMBAFIAITQBAFUAITVAAFcAITZAAFcAITgAAFs4IjlAAFcAIQQ6AAAAOAI7AAAAOAg8AAAAOAg9AAA9OCINBAAAWAAgLgAAUAAwLwAACQAQMAAAUAAwMQEAUQAhOUAAVwAhRQEAUgAhRwAAU0ciSAIAVAAhSQEAVQAhSiAAVgAhTgAACQAgTwAACQAgAAAAAAFTAQAAAAEBUwEAAAABAVNAAAAAAQFTAAAAOAIFEgAAgAEAIBMAAIMBACBQAACBAQAgUQAAggEAIFYAAAEAIAMSAACAAQAgUAAAgQEAIFYAAAEAIAAAAAAAAVMAAABHAgVTAgAAAAFZAgAAAAFaAgAAAAFbAgAAAAFcAgAAAAEBUyAAAAABCxIAAHAAMBMAAHUAMFAAAHEAMFEAAHIAMFIAAHMAIFMAAHQAMFQAAHQAMFUAAHQAMFYAAHQAMFcAAHYAMFgAAHcAMAcxAQAAAAEzAQAAAAE0AQAAAAE1QAAAAAE2QAAAAAE4AAAAOAI5QAAAAAECAAAABQAgEgAAewAgAwAAAAUAIBIAAHsAIBMAAHoAIAELAAB_ADAMAwAAXAAgLgAAWgAwLwAAAwAQMAAAWgAwMQEAAAABMgEAUQAhMwEAUgAhNAEAVQAhNUAAVwAhNkAAVwAhOAAAWzgiOUAAVwAhAgAAAAUAIAsAAHoAIAIAAAB4ACALAAB5ACALLgAAdwAwLwAAeAAQMAAAdwAwMQEAUQAhMgEAUQAhMwEAUgAhNAEAVQAhNUAAVwAhNkAAVwAhOAAAWzgiOUAAVwAhCy4AAHcAMC8AAHgAEDAAAHcAMDEBAFEAITIBAFEAITMBAFIAITQBAFUAITVAAFcAITZAAFcAITgAAFs4IjlAAFcAIQcxAQBhACEzAQBhACE0AQBiACE1QABjACE2QABjACE4AABkOCI5QABjACEHMQEAYQAhMwEAYQAhNAEAYgAhNUAAYwAhNkAAYwAhOAAAZDgiOUAAYwAhBzEBAAAAATMBAAAAATQBAAAAATVAAAAAATZAAAAAATgAAAA4AjlAAAAAAQQSAABwADBQAABxADBSAABzACBWAAB0ADAAAwQAAH0AIEgAAF0AIEkAAF0AIAcxAQAAAAEzAQAAAAE0AQAAAAE1QAAAAAE2QAAAAAE4AAAAOAI5QAAAAAEHMQEAAAABOUAAAAABRQEAAAABRwAAAEcCSAIAAAABSQEAAAABSiAAAAABAgAAAAEAIBIAAIABACADAAAACQAgEgAAgAEAIBMAAIQBACAJAAAACQAgCwAAhAEAIDEBAGEAITlAAGMAIUUBAGEAIUcAAGxHIkgCAG0AIUkBAGIAIUogAG4AIQcxAQBhACE5QABjACFFAQBhACFHAABsRyJIAgBtACFJAQBiACFKIABuACECBAYCBQADAQMAAQEEBwAAAAAFBQAIGAAJGQAKGgALGwAMAAAAAAAFBQAIGAAJGQAKGgALGwAMAQMAAQEDAAEDBQARGgASGwATAAAAAwUAERoAEhsAEwYCAQcIAQgLAQkMAQoNAQwPAQ0RBA4SBQ8UARAWBBEXBhQYARUZARYaBBwdBx0eDR4fAh8gAiAhAiEiAiIjAiMlAiQnBCUoDiYqAicsBCgtDykuAiovAiswBCwzEC00FA"
 }
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
@@ -70,8 +70,8 @@ export interface PrismaClientConstructor {
    * const prisma = new PrismaClient({
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * // Fetch zero or more Resources
+   * const resources = await prisma.resource.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -94,8 +94,8 @@ export interface PrismaClientConstructor {
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Resources
+ * const resources = await prisma.resource.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -188,7 +188,25 @@ export interface PrismaClient<
     extArgs: ExtArgs
   }>>
 
-    
+      /**
+   * `prisma.resource`: Exposes CRUD operations for the **Resource** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Resources
+    * const resources = await prisma.resource.findMany()
+    * ```
+    */
+  get resource(): Prisma.ResourceDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.reservation`: Exposes CRUD operations for the **Reservation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Reservations
+    * const reservations = await prisma.reservation.findMany()
+    * ```
+    */
+  get reservation(): Prisma.ReservationDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

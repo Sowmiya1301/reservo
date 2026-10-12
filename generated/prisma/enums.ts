@@ -9,7 +9,18 @@
 * 🟢 You can import this file directly.
 */
 
+export const ResourceType = {
+  ROOM: 'ROOM',
+  EQUIPMENT: 'EQUIPMENT',
+  VEHICLE: 'VEHICLE'
+} as const
+
+export type ResourceType = (typeof ResourceType)[keyof typeof ResourceType]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const ReservationStatus = {
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ReservationStatus = (typeof ReservationStatus)[keyof typeof ReservationStatus]
