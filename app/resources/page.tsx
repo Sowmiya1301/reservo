@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
 import { connection } from "next/server";
+import Link from "next/link";
 
 async function ResourceList() {
       await connection();
@@ -50,7 +51,15 @@ async function ResourceList() {
 export default function ResourcesPage() {
   return (
     <main className="mx-auto max-w-4xl p-8">
-      <h1 className="text-3xl font-medium mb-6">Resources</h1>
+      <div className="mb-6 flex items-center justify-between">
+  <h1 className="text-3xl font-medium">Resources</h1>
+  <Link
+    href="/resources/new"
+    className="rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-on-primary hover:opacity-90"
+  >
+    + Add resource
+  </Link>
+</div>
 
       <Suspense
         fallback={<p className="text-on-surface-variant">Loading resources…</p>}
