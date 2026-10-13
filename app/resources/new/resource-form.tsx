@@ -1,14 +1,39 @@
 "use client";
+
+import { useActionState, useState } from "react";
 import Link from "next/link";
-import { createResource } from "../actions";
-import { useActionState } from "react";
+
+type FormState = { error?: string };
+
+type Props = {
+  action: (state: FormState, formData: FormData) => Promise<FormState>;
+  initial?: {
+    name: string;
+    type: string;
+    location: string | null;
+    capacity: number | null;
+  };
+  submitLabel?: string;
+};
 
 const inputClass =
   "h-[42px] w-full rounded-lg border border-stone-300 bg-white px-3 text-zinc-900 outline-none focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20";
 const labelClass = "text-[13px] font-medium";
 
-export function ResourceForm() {
-  const [state, formAction, pending] = useActionState(createResource, {});
+export function ResourceForm({ action, initial, submitLabel = "Save" }: Props) {
+  const [state, formAction, pending] = useActionState(action, {});
+
+  const [v, setV] = useState({
+    name: initial?.name ?? "",
+    type: initial?.type ?? "ROOM",
+    location: initial?.location ?? "",
+    capacity: initial?.capacity?.toString() ?? "",
+  });
+
+  const set =
+    (key: keyof typeof v) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+      setV((prev) => ({ ...prev, [key]: e.target.value }));
 
   return (
     <form
@@ -23,12 +48,23 @@ export function ResourceForm() {
 
       <label className="flex flex-col gap-1.5">
         <span className={labelClass}>Name</span>
-        <input name="name" className={inputClass} placeholder="Board Room A" />
+        <input
+          name="name"
+          value={v.name}
+          onChange={set("name")}
+          className={inputClass}
+          placeholder="Board Room A"
+        />
       </label>
 
       <label className="flex flex-col gap-1.5">
         <span className={labelClass}>Type</span>
-        <select name="type" className={inputClass} defaultValue="ROOM">
+        <select
+          name="type"
+          value={v.type}
+          onChange={set("type")}
+          className={inputClass}
+        >
           <option value="ROOM">Room</option>
           <option value="EQUIPMENT">Equipment</option>
           <option value="VEHICLE">Vehicle</option>
@@ -38,7 +74,13 @@ export function ResourceForm() {
       <div className="grid grid-cols-2 gap-3">
         <label className="flex flex-col gap-1.5">
           <span className={labelClass}>Location</span>
-          <input name="location" className={inputClass} placeholder="Floor 3" />
+          <input
+            name="location"
+            value={v.location}
+            onChange={set("location")}
+            className={inputClass}
+            placeholder="Floor 3"
+          />
         </label>
         <label className="flex flex-col gap-1.5">
           <span className={labelClass}>Capacity</span>
@@ -46,6 +88,8 @@ export function ResourceForm() {
             name="capacity"
             type="number"
             min={1}
+            value={v.capacity}
+            onChange={set("capacity")}
             className={inputClass}
             placeholder="12"
           />
@@ -64,7 +108,7 @@ export function ResourceForm() {
           disabled={pending}
           className="min-h-10 rounded-lg bg-blue-700 px-4 font-medium text-white hover:bg-blue-800 disabled:bg-stone-200 disabled:text-stone-500"
         >
-          {pending ? "Saving…" : "Save"}
+          {pending ? "Saving…" : submitLabel}
         </button>
       </div>
     </form>
