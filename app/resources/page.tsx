@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Car, DoorClosed, Monitor, Plus } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { ResourceActions } from "./resource-actions";
 
 const typeInfo = {
   ROOM: { label: "Room", icon: DoorClosed },
@@ -80,6 +81,7 @@ async function ResourceList() {
                 </span>
               )}
             </div>
+            <ResourceActions id={r.id} active={r.isActive} />
           </article>
         );
       })}
