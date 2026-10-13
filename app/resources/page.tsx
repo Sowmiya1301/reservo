@@ -50,7 +50,7 @@ async function ResourceList() {
                     : "bg-stone-100 text-stone-500"
                 }`}
               >
-                {r.isActive ? "Available" : "Inactive"}
+                {r.isActive ? "Active" : "Inactive"}
               </span>
             </div>
 

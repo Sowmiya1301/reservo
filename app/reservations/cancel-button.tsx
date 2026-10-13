@@ -12,7 +12,7 @@ export function CancelButton({ id }: { id: string }) {
       <button
         type="button"
         onClick={() => setConfirming(true)}
-        className="h-8 rounded-lg border border-red-200 bg-white px-3 text-[13px] font-medium text-red-700 hover:bg-red-50"
+        className="inline-flex h-10 w-full items-center justify-center rounded-lg border border-stone-300 px-3 text-[13px] font-medium"
       >
         Cancel
       </button>

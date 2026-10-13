@@ -175,21 +175,22 @@ export function ReservationForm({
         />
       </label>
 
-      <div className="flex justify-end gap-2 pt-1">
-        <Link
-          href="/reservations"
-          className="inline-flex min-h-10 items-center rounded-lg border border-stone-300 bg-white px-4 font-medium hover:bg-stone-50"
-        >
-          Cancel
-        </Link>
-        <button
-          type="submit"
-          disabled={pending}
-          className="min-h-10 rounded-lg bg-blue-700 px-4 font-medium text-white hover:bg-blue-800 disabled:bg-stone-200 disabled:text-stone-500"
-        >
-          {pending ? "Saving…" : "Confirm reservation"}
-        </button>
-      </div>
+      <div className="flex gap-2 pt-1">
+  <Link
+    href="/reservations"
+    className="inline-flex h-10 flex-1 items-center justify-center rounded-lg border border-stone-300 bg-white px-4 text-[13px] font-medium hover:bg-stone-50"
+  >
+    Cancel
+  </Link>
+
+  <button
+    type="submit"
+    disabled={pending}
+    className="inline-flex h-10 flex-1 items-center justify-center rounded-lg bg-blue-700 px-4 text-[13px] font-medium text-white hover:bg-blue-800 disabled:bg-stone-200 disabled:text-stone-500"
+  >
+    {pending ? "Saving…" : "Confirm reservation"}
+  </button>
+</div>
     </form>
   );
 }
