@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { CancelButton } from "./cancel-button";
 import { connection } from "next/server";
 import { Plus } from "lucide-react";
 import { prisma } from "@/lib/prisma";
@@ -22,8 +23,7 @@ const badgeStyle: Record<Status, string> = {
 };
 
 const columns =
-  "grid grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)_110px_130px_110px_150px] items-center gap-4 px-4";
-
+  "grid grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)_110px_130px_110px_260px] items-center gap-4 px-4";
 function formatDate(d: Date) {
   return new Intl.DateTimeFormat("en-GB", {
     weekday: "short",
@@ -160,8 +160,14 @@ async function ReservationTable({
                   {r.shownStatus}
                 </span>
               </span>
-              <span className="text-stone-400">—</span>
-            </div>
+            <div>
+                {r.tab === "upcoming" ? (
+                  <CancelButton id={r.id} />
+                ) : (
+                  <span className="text-stone-400">—</span>
+                )}
+              </div>       
+                </div>
           ))}
         </div>
       </div>

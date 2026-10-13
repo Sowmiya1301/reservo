@@ -1,8 +1,9 @@
 "use server";
 
-import { createReservation } from "@/lib/reservation";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { createReservation } from "@/lib/reservation";
 
 export type ReservationFormState = { error?: string };
 
@@ -28,4 +29,14 @@ export async function submitReservation(
   revalidatePath("/reservations");
   revalidatePath("/schedule");
   redirect("/reservations");
+}
+
+export async function cancelReservation(id: string) {
+  await prisma.reservation.updateMany({
+    where: { id, status: "CONFIRMED", endTime: { gt: new Date() } },
+    data: { status: "CANCELLED" },
+  });
+
+  revalidatePath("/reservations");
+  revalidatePath("/schedule");
 }
