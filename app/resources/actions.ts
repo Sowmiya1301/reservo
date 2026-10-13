@@ -5,10 +5,12 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { ResourceType } from "@/generated/prisma/enums";
 
+type FormState = { error?: string };
+
 export async function createResource(
-  _prevState: { error?: string },
+  _prevState: FormState,
   formData: FormData
-) {
+): Promise<FormState> {
   const name = String(formData.get("name") ?? "").trim();
   const type = String(formData.get("type") ?? "");
   const location = String(formData.get("location") ?? "").trim();

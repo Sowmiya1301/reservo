@@ -37,6 +37,8 @@ model Reservation {
   resource   Resource          @relation(fields: [resourceId], references: [id])
   bookedBy   String            @map("booked_by")
   purpose    String?
+  attendees  Int?
+  notes      String?
   startTime  DateTime          @map("start_time") @db.Timestamptz(6)
   endTime    DateTime          @map("end_time") @db.Timestamptz(6)
   status     ReservationStatus @default(CONFIRMED)

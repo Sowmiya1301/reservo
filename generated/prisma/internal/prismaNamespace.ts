@@ -623,6 +623,8 @@ export const ReservationScalarFieldEnum = {
   resourceId: 'resourceId',
   bookedBy: 'bookedBy',
   purpose: 'purpose',
+  attendees: 'attendees',
+  notes: 'notes',
   startTime: 'startTime',
   endTime: 'endTime',
   status: 'status',

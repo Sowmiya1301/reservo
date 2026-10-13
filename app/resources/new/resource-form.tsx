@@ -1,8 +1,7 @@
 "use client";
-
-import { useActionState } from "react";
 import Link from "next/link";
 import { createResource } from "../actions";
+import { useActionState } from "react";
 
 const inputClass =
   "h-[42px] w-full rounded-lg border border-stone-300 bg-white px-3 text-zinc-900 outline-none focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20";
