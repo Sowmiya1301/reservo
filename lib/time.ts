@@ -27,3 +27,25 @@ export function todayString() {
     new Date()
   );
 }
+
+export function shiftDate(date: string, days: number) {
+  const d = new Date(`${date}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+export function labelDate(date: string) {
+  return new Intl.DateTimeFormat("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${date}T00:00:00Z`));
+}
+
+// Monday of the week that contains `date`
+export function weekStart(date: string) {
+  const dow = new Date(`${date}T00:00:00Z`).getUTCDay(); // 0 = Sunday
+  return shiftDate(date, -((dow + 6) % 7));
+}
