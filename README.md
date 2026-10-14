@@ -2,10 +2,10 @@ Reservo — Resource Reservation Management System
 
 Reservo is a web application that helps an organization manage and book shared resources such as rooms, equipment, and vehicles. It helps people check availability and make reservations without overlapping bookings.
 
-ER diagram: Add your shareable link here.
+ER diagram: (https://dbdiagram.io/d/reservo-6acee1b210dbb6efb5eef95d).
 Demo video: Add your link here if available. Otherwise, submit it through the assessment form.
-The problem
 
+The problem
 Reservations were managed through messages and manual records. This made it difficult to track bookings, check availability, and avoid double bookings.
 
 Reservo solves this problem by keeping all resources and reservations in one place. Users can easily see which resources are available and when they can be booked.
@@ -78,7 +78,6 @@ Installation steps
 # 1. Download the project
 
 git clone https://github.com/Sowmiya1301/reservo.git
-cd reservo
 
 # 2. Install dependencies
 
