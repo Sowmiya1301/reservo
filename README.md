@@ -184,6 +184,5 @@ Resources cannot be marked as under maintenance.
 The application uses one time zone: Sri Lanka time.
 Opening hours are fixed from 8:00 AM to 6:00 PM.
 Testing is done through scripts rather than a complete automated testing system.
-Note on AI assistance
 
 Claude was used to help with guidance and code review during development. The design decisions and implementation choices are mine, and I can explain how they work.
