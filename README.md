@@ -3,7 +3,7 @@ Reservo — Resource Reservation Management System
 Reservo is a web application that helps an organization manage and book shared resources such as rooms, equipment, and vehicles. It helps people check availability and make reservations without overlapping bookings.
 
 ER diagram: (https://dbdiagram.io/d/reservo-6acee1b210dbb6efb5eef95d).
-Demo video: Add your link here if available. Otherwise, submit it through the assessment form.
+Demo video: (https://drive.google.com/drive/folders/1wrfbYEONNxuMJrj49iDeqoz2rRTHVf8c?usp=sharing)
 
 The problem
 Reservations were managed through messages and manual records. This made it difficult to track bookings, check availability, and avoid double bookings.
